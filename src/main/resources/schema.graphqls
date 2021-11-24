@@ -1,0 +1,63 @@
+# ISO 8601 datetime string.
+#
+# Example: 2021-10-26T13:52:49Z
+scalar DateTime
+
+type Query {
+  # Look up policies
+  policiesFeed(
+    # Select policies last modified since this datetime
+    modifiedSince: DateTime
+
+    # Page must be greater than or equal to 0
+    page: Int = 0
+
+    # Number of policies to return per page.
+    #
+    # Limit accepts values in the range [1, 100] inclusive.
+    limit: Int = 50
+  ): PoliciesFeedPayload!
+}
+
+type Mutation {
+  _empty: String
+}
+
+# The response for a policy query along with pagination data.
+type PoliciesFeedPayload {
+  policies: [Policy!]!
+  totalCount: Int
+  totalPages: Int
+}
+
+type Policy {
+  id: ID!
+
+  # The policy's status.
+  displayStatus: PolicyDisplayStatus
+
+  # An optional identifier used by external systems.
+  externalRefId: String
+
+  # The time of the last policy modification.
+  lastModifiedDate: DateTime
+}
+
+enum PolicyDisplayStatus {
+  APPLICATION_IN_PROGRESS
+  AWAITING_CUSTOMER_ACCEPTANCE
+  AWAITING_UW_EVIDENCE
+  CANCELLED
+  CLAIMED
+  CLAIM_CLOSED
+  CLAIM_DECLINED
+  CLAIM_NOTIFIED
+  DEATH_NOTIFIED
+  EXPIRED
+  IN_FORCE
+  IN_MANUAL_UW
+  LAPSED
+  NOT_PROCEEDED_WITH
+  ON_RISK
+  PENDING
+}
